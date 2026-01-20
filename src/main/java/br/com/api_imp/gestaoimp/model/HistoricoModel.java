@@ -1,10 +1,7 @@
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+package br.com.api_imp.gestaoimp.model;
+import lombok.*;
+import java.util.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name="historio_status")
@@ -14,14 +11,14 @@ public class HistoricoModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Id_Status;
+    private Long Id_Status;
 
     @Column(name="Serial_Impressora")
     private String serial_impressora;
     
     @Enumerated(EnumType.STRING)
     @Column(name = "Status")
-    private StatusEnum status; 
+    private StatusImpressoras status; 
 
     @Column(name = "Data_Inicial")
     private Date data_inicial;

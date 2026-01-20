@@ -1,6 +1,6 @@
+package br.com.api_imp.gestaoimp.model;
+import lombok.*;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 

@@ -1,7 +1,6 @@
+package br.com.api_imp.gestaoimp.model;
+import lombok.*;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
 @Entity
 @Table(name = "impressoras")
 @Getter
@@ -9,6 +8,10 @@ import lombok.Setter;
 public class ImpressorasModel {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id_impressora;
+    
+    @Column(nullable = false)
     private String serial;
 
     @Column(nullable = false)

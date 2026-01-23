@@ -1,31 +1,68 @@
 package br.com.api_imp.gestaoimp.model;
-import lombok.*;
-import java.util.*;
+
 import jakarta.persistence.*;
 
+
+import java.time.LocalDateTime;
+
 @Entity
-@Table(name="historio_status")
-@Getter
-@Setter
+@Table(name = "historico_status")
 public class HistoricoModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id_Status;
+    private Long id;
 
-    @Column(name="Serial_Impressora")
-    private String serial_impressora;
-    
+    @ManyToOne
+    @JoinColumn(name = "serial_impressora", nullable = false)
+    private ImpressorasModel impressora;
+
     @Enumerated(EnumType.STRING)
-    @Column(name = "Status")
-    private StatusImpressoras status; 
+    @Column(nullable = false)
+    private StatusImpressoras status;
 
-    @Column(name = "Data_Inicial")
-    private Date data_inicial;
+    @Column(name = "data_inicio", nullable = false)
+    private LocalDateTime dataInicio = LocalDateTime.now();
 
-    @Column(name = "Data_Final")
-    private Date data_final;
+    @Column(name = "data_fim")
+    private LocalDateTime dataFim;
 
-    @Column(name = "Observacao")
+    @Column(length = 255)
     private String observacao;
+
+    public Long getId() {
+        return id;
+    }
+    public ImpressorasModel getImpressora() {
+        return impressora;
+    }
+    public void setImpressora(ImpressorasModel impressora) {
+        this.impressora = impressora;
+    }
+    public StatusImpressoras getStatus() {
+        return status;
+    }
+    public void setStatus(StatusImpressoras status) {
+        this.status = status;
+    }
+    public LocalDateTime getDataInicio() {
+        return dataInicio;
+    }
+    public void setDataInicio(LocalDateTime dataInicio) {
+        this.dataInicio = dataInicio;
+    }
+    public LocalDateTime getDataFim() {
+        return dataFim;
+    }
+    public void setDataFim(LocalDateTime dataFim) {
+        this.dataFim = dataFim;
+    }
+    public String getObservacao() {
+        return observacao;
+    }
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
+    }
+
+    
 }

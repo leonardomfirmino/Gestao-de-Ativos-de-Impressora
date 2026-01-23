@@ -1,18 +1,16 @@
 package br.com.api_imp.gestaoimp.model;
-import lombok.*;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "movimentacao_impressora")
-@Getter
-@Setter
+
 public class MovimentacaoImpressoraModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idMovimentacao;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "serial_impressora", nullable = false)
@@ -27,6 +25,35 @@ public class MovimentacaoImpressoraModel {
 
     @Column(name = "data_fim")
     private LocalDateTime dataFim;
+
+    public Long getId() {
+        return id;
+    }
+    public ImpressorasModel getImpressora() {
+        return impressora;
+    }
+    public void setImpressora(ImpressorasModel impressora) {
+        this.impressora = impressora;
+    }
+    public LocalModel getLocal() {
+        return local;
+    }
+    public void setLocal(LocalModel local) {
+        this.local = local;
+    }
+    public LocalDateTime getDataInicio() {
+        return dataInicio;
+    }
+    public void setDataInicio(LocalDateTime dataInicio) {
+        this.dataInicio = dataInicio;
+    }
+    public LocalDateTime getDataFim() {
+        return dataFim;
+    }
+    public void setDataFim(LocalDateTime dataFim) {
+        this.dataFim = dataFim;
+    }
+    
 
     
 }

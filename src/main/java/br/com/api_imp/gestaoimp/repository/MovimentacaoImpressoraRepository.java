@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import br.com.api_imp.gestaoimp.model.MovimentacaoImpressoraModel;
 
 @Repository
-public interface MovimentacaoImpressorasRepository extends JpaRepository<MovimentacaoImpressoraModel,Long> {
+public interface MovimentacaoImpressoraRepository extends JpaRepository<MovimentacaoImpressoraModel,Long> {
     
 }

@@ -1,8 +1,11 @@
 package br.com.api_imp.gestaoimp.service;
 
+import org.springframework.stereotype.Service;
+
 import br.com.api_imp.gestaoimp.model.MovimentacaoImpressoraModel;
 import br.com.api_imp.gestaoimp.repository.MovimentacaoImpressoraRepository;
 
+@Service
 public class MovimentacaoImpressoraService {
     private final MovimentacaoImpressoraRepository movimentacaoImpressoraRepository;
     public MovimentacaoImpressoraService(MovimentacaoImpressoraRepository movimentacaoImpressoraRepository) {

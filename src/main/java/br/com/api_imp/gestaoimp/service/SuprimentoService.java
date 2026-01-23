@@ -1,8 +1,11 @@
 package br.com.api_imp.gestaoimp.service;
 
+import org.springframework.stereotype.Service;
+
 import br.com.api_imp.gestaoimp.model.SuprimentoModel;
 import br.com.api_imp.gestaoimp.repository.SuprimentoRepository;
 
+@Service
 public class SuprimentoService {
     private final SuprimentoRepository suprimentoRepository;
     public SuprimentoService(SuprimentoRepository suprimentoRepository){

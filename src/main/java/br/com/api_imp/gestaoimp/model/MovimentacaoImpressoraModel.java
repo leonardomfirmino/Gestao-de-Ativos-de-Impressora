@@ -10,10 +10,10 @@ public class MovimentacaoImpressoraModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id_MovImp;
 
     @ManyToOne
-    @JoinColumn(name = "serial_impressora", nullable = false)
+    @JoinColumn(name = "id_Imp", nullable = false)
     private ImpressorasModel impressora;
 
     @ManyToOne
@@ -26,8 +26,8 @@ public class MovimentacaoImpressoraModel {
     @Column(name = "data_fim")
     private LocalDateTime dataFim;
 
-    public Long getId() {
-        return id;
+    public Long getId_MovImp() {
+        return id_MovImp;
     }
     public ImpressorasModel getImpressora() {
         return impressora;

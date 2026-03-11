@@ -1,5 +1,7 @@
 package br.com.api_imp.gestaoimp.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import br.com.api_imp.gestaoimp.model.LocalModel;
@@ -13,8 +15,14 @@ public class LocalService {
         this.localRepository = localRepository;
     }
 
-    public Iterable<LocalModel> obterLocais(){
-        return localRepository.findAll();
+    public List<String> buscarUnidades(){
+        return localRepository.buscarUnidades();
+    }
+    public List<String> buscarDepartamentos(){
+        return localRepository.buscarDepartamentos();
+    }
+    public List<String> buscarLocais(){
+        return localRepository.buscarLocais();
     }
     public LocalModel criarLocal(LocalModel local){
         return localRepository.save(local);

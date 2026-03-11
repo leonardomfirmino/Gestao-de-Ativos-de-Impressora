@@ -8,7 +8,7 @@ public class LocalModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id_local;
 
     @Column(nullable = false)
     private String departamento;

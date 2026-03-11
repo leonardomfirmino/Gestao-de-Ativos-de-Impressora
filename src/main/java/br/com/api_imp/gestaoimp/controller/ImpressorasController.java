@@ -6,18 +6,13 @@ import br.com.api_imp.gestaoimp.service.ImpressorasService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 
-
-
-
-
-
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/impressoras")
 public class ImpressorasController {
     
     @Autowired
     private ImpressorasService impressorasService;
-    
     
 
     @GetMapping

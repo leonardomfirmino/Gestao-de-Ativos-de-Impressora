@@ -9,7 +9,7 @@ public class ImpressorasModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
-    private Long id;
+    private Long id_Imp;
     
     @Column(length = 50)
     private String serial;
@@ -17,14 +17,14 @@ public class ImpressorasModel {
     @Column(nullable = false, length = 100)
     private String modelo;
 
-    @Column(name = "fila_impressao", nullable = false, length = 100)
+    @Column(name = "fila_impressao", length = 100)
     private String filaImpressao;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status_atual", nullable = false)
     private StatusImpressoras statusAtual = StatusImpressoras.Estoque;
     public Long getId() {
-        return id;
+        return id_Imp;
     }
     public String getSerial() {
         return serial;

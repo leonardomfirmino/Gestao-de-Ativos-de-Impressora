@@ -15,6 +15,8 @@ public interface ImpressorasRepository extends JpaRepository<ImpressorasModel,Lo
     Optional<ImpressorasModel> findBySerialAndIp(String serial, String ip);
     
     Optional<ImpressorasModel> findBySerial(String serial);
+    
+    boolean existsBySerial(String serial);
 
     @Query(value = "SELECT DISTINCT modelo FROM impressoras ORDER BY modelo", nativeQuery = true)
     List<String> buscarModelos();

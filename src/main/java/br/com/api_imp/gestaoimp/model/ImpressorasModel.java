@@ -26,6 +26,9 @@ public class ImpressorasModel {
     public Long getId() {
         return id_Imp;
     }
+    public void setId(Long id_Imp) {
+        this.id_Imp = id_Imp;
+    }
     public String getSerial() {
         return serial;
     }

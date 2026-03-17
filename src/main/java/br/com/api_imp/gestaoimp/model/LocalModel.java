@@ -19,6 +19,13 @@ public class LocalModel {
     @Column(name = "nome_local", nullable = false)
     private String nomeLocal;
 
+    public long getIdLocal() {
+        return id_local;
+    }
+    public void setIdLocal(Long id_local) {
+        this.id_local = id_local;
+    }
+
     public String getNomeLocal() {
         return nomeLocal;
     }

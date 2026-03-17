@@ -10,24 +10,28 @@ import br.com.api_imp.gestaoimp.repository.LocalRepository;
 @Service
 public class LocalService {
     private final LocalRepository localRepository;
-    
-    public LocalService(LocalRepository localRepository){
+
+    public LocalService(LocalRepository localRepository) {
         this.localRepository = localRepository;
     }
 
-    public List<String> buscarUnidades(){
+    public List<String> buscarUnidades() {
         return localRepository.buscarUnidades();
     }
-    public List<String> buscarDepartamentos(){
+
+    public List<String> buscarDepartamentos() {
         return localRepository.buscarDepartamentos();
     }
-    public List<String> buscarLocais(){
+
+    public List<String> buscarLocais() {
         return localRepository.buscarLocais();
     }
-    public LocalModel criarLocal(LocalModel local){
+
+    public LocalModel criarLocal(LocalModel local) {
         return localRepository.save(local);
     }
-    public LocalModel atualizarLocal(Long id, LocalModel local){
+
+    public LocalModel atualizarLocal(Long id, LocalModel local) {
         LocalModel localExistente = buscarLocal(id);
         localExistente.setDepartamento(local.getDepartamento());
         localExistente.setNomeLocal(local.getNomeLocal());
@@ -35,11 +39,27 @@ public class LocalService {
         localExistente.setUnidade(local.getUnidade());
         return localRepository.save(localExistente);
     }
-    public void deletarLocal(Long id){
+
+    public void deletarLocal(Long id) {
         localRepository.deleteById(id);
     }
-    public LocalModel buscarLocal(Long id){
+
+    public LocalModel buscarLocal(Long id) {
         return localRepository.findById(id).orElseThrow(() -> new RuntimeException("Local não encontrado"));
     }
-    
+
+    public LocalModel buscarOuCriarLocal(String nomeLocal, String departamento, String unidade) {
+
+        return localRepository
+                .findByNomeLocalAndDepartamentoAndUnidade(nomeLocal, departamento, unidade)
+                .orElseGet(() -> {
+                    LocalModel novo = new LocalModel();
+                    novo.setNomeLocal(nomeLocal);
+                    novo.setDepartamento(departamento);
+                    novo.setUnidade(unidade);
+
+                    return localRepository.save(novo);
+                });
+    }
+
 }

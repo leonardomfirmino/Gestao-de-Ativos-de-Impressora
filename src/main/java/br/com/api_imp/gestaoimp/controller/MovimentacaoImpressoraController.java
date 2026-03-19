@@ -1,5 +1,7 @@
 package br.com.api_imp.gestaoimp.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,11 +16,11 @@ public class MovimentacaoImpressoraController {
     private MovimentacaoImpressoraService movimentacaoImpressoraService;   
 
     @GetMapping
-    public Iterable<MovimentacaoImpressoraModel> getMovimentacoesImpressora() {
+    public List<MovimentacaoImpressoraModel> getMovimentacoesImpressora() {
         return movimentacaoImpressoraService.listarMovimentacoes();
     }
     @PostMapping("/criarMovimentacaoImpressora")
-    public MovimentacaoImpressoraModel criarMovimentacaoImpressora(@RequestBody MovimentacaoImpressoraModel movimentacaoImpressora) {
+    public MovimentacaoImpressoraModel criarMovimentacaoImpressora( @RequestBody MovimentacaoImpressoraModel movimentacaoImpressora) {
         return movimentacaoImpressoraService.criarMovimentacao(movimentacaoImpressora);
     }
     @PutMapping("/atualizarMovimentacaoImpressora/{id}")

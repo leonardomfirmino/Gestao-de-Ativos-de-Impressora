@@ -11,15 +11,12 @@ public class LocalModel {
     private Long id_local;
 
     @Column(nullable = false)
-    private String departamento;
-
-    @Column(nullable = false)
     private String unidade;
 
     @Column(name = "nome_local", nullable = false)
     private String nomeLocal;
 
-    public long getIdLocal() {
+    public Long getIdLocal() {
         return id_local;
     }
     public void setIdLocal(Long id_local) {
@@ -31,12 +28,6 @@ public class LocalModel {
     }
     public void setNomeLocal(String nomeLocal) {
         this.nomeLocal = nomeLocal;
-    }
-    public String getDepartamento() {
-        return departamento;
-    }
-    public void setDepartamento(String departamento) {
-        this.departamento = departamento;
     }
     public String getUnidade() {
         return unidade;

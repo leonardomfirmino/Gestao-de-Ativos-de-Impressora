@@ -14,15 +14,13 @@ public interface LocalRepository extends JpaRepository<LocalModel,Long> {
     @Query(value = "SELECT DISTINCT unidade FROM locais ORDER BY unidade", nativeQuery = true)
     List<String> buscarUnidades();
 
-    @Query(value = "SELECT DISTINCT departamento FROM locais ORDER BY departamento", nativeQuery = true)
-    List<String> buscarDepartamentos();
-
     @Query(value = "SELECT DISTINCT nome_local FROM locais ORDER BY nome_local", nativeQuery = true)
     List<String> buscarLocais();
 
-    Optional<LocalModel> findByNomeLocalAndDepartamentoAndUnidade(
+    Optional<LocalModel> findByNomeLocal(String nome_local);
+
+    Optional<LocalModel> findByNomeLocalAndUnidade(
         String nomeLocal,
-        String departamento,
         String unidade
     );
 }

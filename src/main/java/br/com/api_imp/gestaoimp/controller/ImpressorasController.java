@@ -6,8 +6,14 @@ import org.springframework.web.multipart.MultipartFile;
 import br.com.api_imp.gestaoimp.model.ImpressorasModel;
 import br.com.api_imp.gestaoimp.service.ImpressorasService;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -28,16 +34,15 @@ public class ImpressorasController {
         }
     }
 
-    @GetMapping
-    public Iterable<ImpressorasModel> listarImpressoras() {
-        return impressorasService.mostrarImp();
+    @GetMapping("/modelo")
+    public List<String> modelo() {
+        return impressorasService.buscarModelos();
     }
-
-    @GetMapping("/buscar/{id}")
-    public ImpressorasModel buscarImpressora(@PathVariable Long id) {
-        return impressorasService.buscarImp(id);
+    
+    @GetMapping("/serial")
+    public List<String> serial() {
+        return impressorasService.buscarSeriais();
     }
-
 
     @DeleteMapping("/deletar/{id}")
     public void deletarImpressora(@PathVariable Long id) {

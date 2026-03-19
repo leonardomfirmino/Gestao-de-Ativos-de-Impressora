@@ -19,10 +19,6 @@ public class LocalService {
         return localRepository.buscarUnidades();
     }
 
-    public List<String> buscarDepartamentos() {
-        return localRepository.buscarDepartamentos();
-    }
-
     public List<String> buscarLocais() {
         return localRepository.buscarLocais();
     }
@@ -33,9 +29,7 @@ public class LocalService {
 
     public LocalModel atualizarLocal(Long id, LocalModel local) {
         LocalModel localExistente = buscarLocal(id);
-        localExistente.setDepartamento(local.getDepartamento());
         localExistente.setNomeLocal(local.getNomeLocal());
-        localExistente.setDepartamento(local.getDepartamento());
         localExistente.setUnidade(local.getUnidade());
         return localRepository.save(localExistente);
     }
@@ -48,14 +42,13 @@ public class LocalService {
         return localRepository.findById(id).orElseThrow(() -> new RuntimeException("Local não encontrado"));
     }
 
-    public LocalModel buscarOuCriarLocal(String nomeLocal, String departamento, String unidade) {
+    public LocalModel buscarOuCriarLocal(String nomeLocal, String unidade) {
 
         return localRepository
-                .findByNomeLocalAndDepartamentoAndUnidade(nomeLocal, departamento, unidade)
+                .findByNomeLocalAndUnidade(nomeLocal, unidade)
                 .orElseGet(() -> {
                     LocalModel novo = new LocalModel();
                     novo.setNomeLocal(nomeLocal);
-                    novo.setDepartamento(departamento);
                     novo.setUnidade(unidade);
 
                     return localRepository.save(novo);

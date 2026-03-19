@@ -14,6 +14,7 @@ import br.com.api_imp.gestaoimp.repository.ImpressorasRepository;
 import br.com.api_imp.gestaoimp.repository.MovimentacaoImpressoraRepository;
 import br.com.api_imp.gestaoimp.model.ImpressorasModel;
 import br.com.api_imp.gestaoimp.model.MovimentacaoImpressoraModel;
+import br.com.api_imp.gestaoimp.model.StatusImpressoras;
 
 @Service
 public class ImpressorasService {
@@ -34,6 +35,14 @@ public class ImpressorasService {
     }
    
 
+    public List<String> buscarModelos() {
+        return impressorasRepository.buscarModelos();
+    }
+    
+    public List<String> buscarSeriais() {
+        return impressorasRepository.buscarSerial();
+    }
+    
     public ImpressorasService(ImpressorasRepository impressorasRepository, LocalService localService,
             MovimentacaoImpressoraRepository movimentacaoRepository) {
         this.impressorasRepository = impressorasRepository;
@@ -44,21 +53,26 @@ public class ImpressorasService {
     public void salvarOuAtualizarComMovimentacao(// Salvar ou atualizar impressora e registrar movimentação
             String modelo,
             String serial,
-            String status,
             String nomeLocal,
-            String departamento,
-            String unidade) {
+            String unidade,
+            String status,
+            String filaImpressao,
+            String ip
+        ) {
 
         ImpressorasModel impressora = impressorasRepository
-                .findBySerial(serial)
+                .findBySerialAndIp(serial, ip)
                 .orElse(new ImpressorasModel());
 
         impressora.setModelo(modelo);
         impressora.setSerial(serial);
+        impressora.setStatusAtual(StatusImpressoras.valueOf(status));
+        impressora.setFilaImpressao(filaImpressao);
+        impressora.setIp(ip);
 
         impressora = impressorasRepository.save(impressora);
 
-        var local = localService.buscarOuCriarLocal(nomeLocal, departamento, unidade);
+        var local = localService.buscarOuCriarLocal(nomeLocal, unidade);
 
         var movAtual = movimentacaoRepository.buscarMovimentacaoAtiva(impressora.getId());
 
@@ -95,18 +109,13 @@ public class ImpressorasService {
 
             String modelo = getCellValue(row, 0);
             String serial = getCellValue(row, 1);
-            String departamento = getCellValue(row, 2);
-            String nomeLocal = getCellValue(row, 3);
-            String unidade = getCellValue(row, 4);
-            String status = getCellValue(row, 5);
+            String status = getCellValue(row, 2);
+            String filaImpressao = getCellValue(row, 3);
+            String ip = getCellValue(row, 4);
+            String nomeLocal = getCellValue(row, 5);
+            String unidade = getCellValue(row, 6);
 
-            salvarOuAtualizarComMovimentacao(
-                    modelo,
-                    serial,
-                    status,
-                    nomeLocal,
-                    departamento,
-                    unidade);
+            salvarOuAtualizarComMovimentacao(modelo, serial, status, filaImpressao, ip, nomeLocal, unidade);
         }
 
         workbook.close();
@@ -120,14 +129,6 @@ public class ImpressorasService {
         impressoraExistente.setSerial(impressorasModel.getSerial());
         impressoraExistente.setFilaImpressao(impressorasModel.getFilaImpressao());
         return impressorasRepository.save(impressoraExistente);
-    }
-
-    public ImpressorasModel buscarImp(Long id) {// Buscar impressora por ID
-        return impressorasRepository.findById(id).orElseThrow(() -> new RuntimeException("Impressora não encontrada"));
-    }
-
-    public List<ImpressorasModel> mostrarImp() {// Listar todas as impressoras
-        return impressorasRepository.findAll();
     }
 
     public void deletarImp(Long id) {// Deletar impressora por ID

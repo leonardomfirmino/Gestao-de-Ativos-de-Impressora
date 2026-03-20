@@ -2,9 +2,7 @@ package br.com.api_imp.gestaoimp.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
-import org.apache.el.stream.*;
 import org.springframework.stereotype.Service;
 
 import br.com.api_imp.gestaoimp.model.ImpressorasModel;
@@ -20,8 +18,7 @@ public class MovimentacaoImpressoraService {
     private final ImpressorasRepository impressorasRepository;
     private final LocalRepository localRepository;
 
-    public MovimentacaoImpressoraService(MovimentacaoImpressoraRepository movimentacaoImpressoraRepository,
-            ImpressorasRepository impressorasRepository, LocalRepository localRepository) {
+    public MovimentacaoImpressoraService(MovimentacaoImpressoraRepository movimentacaoImpressoraRepository,ImpressorasRepository impressorasRepository, LocalRepository localRepository) {
         this.movimentacaoImpressoraRepository = movimentacaoImpressoraRepository;
         this.impressorasRepository = impressorasRepository;
         this.localRepository = localRepository;
@@ -41,8 +38,16 @@ public class MovimentacaoImpressoraService {
         novaMov.setImpressora(impressoraCadastrada);
         novaMov.setLocal(localCadastrado);
 
-        
-        Long impressoraId = novaMov.getImpressora().getId();
+
+        if(novaMov.getDataFim() == null){
+            List<String> movimentacoesAtivas = movimentacaoImpressoraRepository
+                    .findByDataFimIsNull();
+
+            if (movimentacoesAtivas.contains(novaMov.getImpressora().getSerial())) {
+                throw new RuntimeException("A impressora já possui uma movimentação ativa. Finalize a movimentação atual antes de criar uma nova.");
+            }
+
+        }
 
         if (novaMov.getDataInicio() == null) {
             novaMov.setDataInicio(LocalDateTime.now());

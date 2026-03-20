@@ -79,7 +79,7 @@ public class ImpressorasService {
         if (movAtual.isPresent()) {
             var mov = movAtual.get();
 
-            if (mov.getLocal().equals(local.getIdLocal())) {
+            if (mov.getLocal().getIdLocal() == local.getIdLocal()) {
                 return;
             }
 

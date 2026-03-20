@@ -1,5 +1,6 @@
 package br.com.api_imp.gestaoimp.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,5 +13,7 @@ public interface MovimentacaoImpressoraRepository extends JpaRepository<Moviment
     @Query("SELECT m FROM MovimentacaoImpressoraModel m WHERE m.impressora.id_Imp = :id_Imp AND m.dataFim IS NULL")
     Optional<MovimentacaoImpressoraModel> buscarMovimentacaoAtiva(Long id_Imp);
 
-    Optional<MovimentacaoImpressoraModel> findByImpressoraIdAndDataFimIsNull(Long impressoraId);
+    @Query("SELECT m.impressora.serial FROM MovimentacaoImpressoraModel m WHERE m.dataFim IS NULL")
+    List<String> findByDataFimIsNull();
+
 }

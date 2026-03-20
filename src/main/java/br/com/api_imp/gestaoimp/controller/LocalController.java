@@ -20,11 +20,6 @@ public class LocalController {
         return localsService.buscarUnidades();
     }
 
-    @GetMapping("/departamentos")
-    public List<String> departamentos(){
-        return localsService.buscarDepartamentos();
-    }
-
     @GetMapping("/nomes")
     public List<String> nomes(){
         return localsService.buscarLocais();

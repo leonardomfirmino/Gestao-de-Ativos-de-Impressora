@@ -176,4 +176,4 @@ Abrir o arquivo HTML no navegador ou servir via backend.
 
 ## 👨‍💻 Autor
 
-Desenvolvido por você 😄
+Leonardo Marques Firmino

@@ -97,8 +97,7 @@ public class ImpressorasService {
         movimentacaoRepository.save(novaMov);
     }
 
-    public void processarPlanilha(MultipartFile file) throws Exception {// Processar planilha Excel para importar dados
-                                                                        // de impressoras
+    public void processarPlanilha(MultipartFile file) throws Exception {
         Workbook workbook = new XSSFWorkbook(file.getInputStream());
         Sheet sheet = workbook.getSheetAt(0);
 
@@ -116,7 +115,7 @@ public class ImpressorasService {
 
             if (impressorasRepository.existsBySerial(serial)) {
                 throw new RuntimeException("Já existe uma impressora com esse serial: " + serial);
-            }
+            }else{
 
             salvarOuAtualizarComMovimentacao(modelo,
                     serial,
@@ -125,6 +124,7 @@ public class ImpressorasService {
                     status,
                     filaImpressao,
                     ip);
+            }
         }
 
         workbook.close();

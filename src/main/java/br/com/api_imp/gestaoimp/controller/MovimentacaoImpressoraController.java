@@ -23,6 +23,11 @@ public class MovimentacaoImpressoraController {
     public MovimentacaoImpressoraModel criarMovimentacaoImpressora( @RequestBody MovimentacaoImpressoraModel movimentacaoImpressora) {
         return movimentacaoImpressoraService.criarMovimentacao(movimentacaoImpressora);
     }
+
+    @PostMapping("/cadastrarImpressoraComLocal")
+    public MovimentacaoImpressoraModel cadastrarImpressoraComLocal(@RequestBody MovimentacaoImpressoraModel cadastrarImpressoraComLocal){
+        return movimentacaoImpressoraService.cadastrarImpressoraComLocal(cadastrarImpressoraComLocal);
+    }
     @PutMapping("/atualizarMovimentacaoImpressora/{id}")
     public MovimentacaoImpressoraModel atualizarMovimentacaoImpressora(@PathVariable Long id, @RequestBody MovimentacaoImpressoraModel movimentacaoImpressora) {
         return movimentacaoImpressoraService.atualizarMovimentacao(id, movimentacaoImpressora);

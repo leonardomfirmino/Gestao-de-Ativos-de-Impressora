@@ -18,7 +18,8 @@ public class MovimentacaoImpressoraService {
     private final ImpressorasRepository impressorasRepository;
     private final LocalRepository localRepository;
 
-    public MovimentacaoImpressoraService(MovimentacaoImpressoraRepository movimentacaoImpressoraRepository,ImpressorasRepository impressorasRepository, LocalRepository localRepository) {
+    public MovimentacaoImpressoraService(MovimentacaoImpressoraRepository movimentacaoImpressoraRepository,
+            ImpressorasRepository impressorasRepository, LocalRepository localRepository) {
         this.movimentacaoImpressoraRepository = movimentacaoImpressoraRepository;
         this.impressorasRepository = impressorasRepository;
         this.localRepository = localRepository;
@@ -34,17 +35,16 @@ public class MovimentacaoImpressoraService {
         LocalModel localCadastrado = localRepository.findByNomeLocal(local)
                 .orElseThrow(() -> new RuntimeException("Local não encontrado: " + local));
 
-       
         novaMov.setImpressora(impressoraCadastrada);
         novaMov.setLocal(localCadastrado);
 
-
-        if(novaMov.getDataFim() == null){
+        if (novaMov.getDataFim() == null) {
             List<String> movimentacoesAtivas = movimentacaoImpressoraRepository
                     .findByDataFimIsNull();
 
             if (movimentacoesAtivas.contains(novaMov.getImpressora().getSerial())) {
-                throw new RuntimeException("A impressora já possui uma movimentação ativa. Finalize a movimentação atual antes de criar uma nova.");
+                throw new RuntimeException(
+                        "A impressora já possui uma movimentação ativa. Finalize a movimentação atual antes de criar uma nova.");
             }
 
         }
@@ -56,13 +56,45 @@ public class MovimentacaoImpressoraService {
         return movimentacaoImpressoraRepository.save(novaMov);
     }
 
-    public MovimentacaoImpressoraModel atualizarMovimentacao(Long id,MovimentacaoImpressoraModel movimentacaoImpressoraModel) {
+    public MovimentacaoImpressoraModel atualizarMovimentacao(Long id,
+            MovimentacaoImpressoraModel movimentacaoImpressoraModel) {
         MovimentacaoImpressoraModel movimentacaoImpressoraExistente = buscarMovimentacaoPorId(id);
         movimentacaoImpressoraExistente.setDataFim(movimentacaoImpressoraModel.getDataFim());
         movimentacaoImpressoraExistente.setDataInicio(movimentacaoImpressoraModel.getDataInicio());
         movimentacaoImpressoraExistente.setImpressora(movimentacaoImpressoraModel.getImpressora());
         movimentacaoImpressoraExistente.setLocal(movimentacaoImpressoraModel.getLocal());
         return movimentacaoImpressoraRepository.save(movimentacaoImpressoraExistente);
+    }
+
+    public MovimentacaoImpressoraModel cadastrarImpressoraComLocal(MovimentacaoImpressoraModel novImpLocal) {
+        
+        ImpressorasModel novaImpressora = novImpLocal.getImpressora();
+        LocalModel novoLocal = novImpLocal.getLocal();
+        boolean verificacaoImpressoraExistente = impressorasRepository.existsBySerial(novaImpressora.getSerial());
+
+        
+        if (!verificacaoImpressoraExistente) {
+            if (novaImpressora != null) {
+                novaImpressora = impressorasRepository.save(novaImpressora);
+            }
+        }else{
+            throw new RuntimeException("Impressora já existe no sistema");
+        }
+
+        if (novoLocal != null) {
+            novoLocal = localRepository.save(novoLocal);
+        } else {
+            throw new RuntimeException("Dados do local são obrigatórios.");
+        }
+
+        novImpLocal.setImpressora(novaImpressora);
+        novImpLocal.setLocal(novoLocal);
+
+        if (novImpLocal.getDataInicio() == null) {
+            novImpLocal.setDataInicio(LocalDateTime.now());
+        }
+
+        return movimentacaoImpressoraRepository.save(novImpLocal);
     }
 
     public void deletarMovimentacao(Long id) {

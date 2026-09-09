@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import br.com.api_imp.gestaoimp.model.LocalModel;
 import br.com.api_imp.gestaoimp.service.LocalService;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+
 @RestController
 @RequestMapping("/locais")
 public class LocalController {

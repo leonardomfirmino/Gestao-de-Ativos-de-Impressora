@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import br.com.api_imp.gestaoimp.model.MovimentacaoImpressoraModel;
 import br.com.api_imp.gestaoimp.service.MovimentacaoImpressoraService;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+
 @RestController
 @RequestMapping("/movimentacoesImpressora")
 public class MovimentacaoImpressoraController {

@@ -22,7 +22,16 @@ public class ImpressorasService {
     private final LocalService localService;
     private final MovimentacaoImpressoraRepository movimentacaoRepository;
 
-    private String getCellValue(Row row, int index) {// Obter valor de célula considerando diferentes tipos de dados
+   
+
+    public ImpressorasService(ImpressorasRepository impressorasRepository, LocalService localService,
+            MovimentacaoImpressoraRepository movimentacaoRepository) {
+        this.impressorasRepository = impressorasRepository;
+        this.localService = localService;
+        this.movimentacaoRepository = movimentacaoRepository;
+    }
+
+     private String getCellValue(Row row, int index) {// Obter valor de célula considerando diferentes tipos de dados
         Cell cell = row.getCell(index);
 
         if (cell == null)
@@ -42,13 +51,6 @@ public class ImpressorasService {
 
     public List<String> buscarSeriais() {
         return impressorasRepository.buscarSerial();
-    }
-
-    public ImpressorasService(ImpressorasRepository impressorasRepository, LocalService localService,
-            MovimentacaoImpressoraRepository movimentacaoRepository) {
-        this.impressorasRepository = impressorasRepository;
-        this.localService = localService;
-        this.movimentacaoRepository = movimentacaoRepository;
     }
 
     public void salvarOuAtualizarComMovimentacao(// Salvar ou atualizar impressora e registrar movimentação
@@ -140,6 +142,13 @@ public class ImpressorasService {
         return impressorasRepository.save(impressoraExistente);
     }
 
+    public List<ImpressorasModel> listarImpressoras() {
+        return impressorasRepository.findAll();
+    }
+    
+    public ImpressorasModel cadastrarImpressora(ImpressorasModel iModel){
+        return impressorasRepository.save(iModel);
+    }
     public void deletarImp(Long id) {// Deletar impressora por ID
         impressorasRepository.deleteById(id);
     }

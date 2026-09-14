@@ -3,14 +3,19 @@ package br.com.api_imp.gestaoimp.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
+import br.com.api_imp.gestaoimp.dto.AlocacaoDTO;
+import br.com.api_imp.gestaoimp.dto.TrocaDTO;
 import br.com.api_imp.gestaoimp.model.ImpressorasModel;
 import br.com.api_imp.gestaoimp.model.LocalModel;
 import br.com.api_imp.gestaoimp.model.MovimentacaoImpressoraModel;
+import br.com.api_imp.gestaoimp.model.StatusImpressoras;
 import br.com.api_imp.gestaoimp.repository.ImpressorasRepository;
 import br.com.api_imp.gestaoimp.repository.LocalRepository;
 import br.com.api_imp.gestaoimp.repository.MovimentacaoImpressoraRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class MovimentacaoImpressoraService {
@@ -78,7 +83,7 @@ public class MovimentacaoImpressoraService {
                 novaImpressora = impressorasRepository.save(novaImpressora);
             }
         }else{
-            throw new RuntimeException("Impressora já existe no sistema");
+            throw new RuntimeException("ImpressoraModel  já existe no sistema");
         }
 
         if (novoLocal != null) {
@@ -110,4 +115,52 @@ public class MovimentacaoImpressoraService {
                 .orElseThrow(() -> new RuntimeException("Movimentação não encontrada"));
     }
 
+    @Transactional
+    public void alocarImpressoraDoEstoque(AlocacaoDTO dto) {
+        ImpressorasModel  imp = impressorasRepository.findById(dto.idImp())
+                .orElseThrow(() -> new RuntimeException("ImpressoraModel  não encontrada"));
+        LocalModel local = localRepository.findById(dto.idLocal())
+                .orElseThrow(() -> new RuntimeException("Local não encontrado"));
+
+        
+        imp.setStatusAtual(StatusImpressoras.Alocado);
+        impressorasRepository.save(imp);
+
+        
+        MovimentacaoImpressoraModel  mov = new MovimentacaoImpressoraModel();
+        mov.setImpressora(imp);
+        mov.setLocal(local);
+        mov.setDataInicio(LocalDateTime.now());
+        mov.setDescricao(dto.descricao());
+        movimentacaoImpressoraRepository.save(mov);
+    }
+
+    @Transactional
+    public void realizarTrocaTecnica(TrocaDTO dto) {
+       
+        MovimentacaoImpressoraModel  movAtual = movimentacaoImpressoraRepository.buscarMovimentacaoAtiva(dto.idImpAtiva())
+                .orElseThrow(() -> new RuntimeException("Movimentação ativa não encontrada"));
+
+        LocalDateTime agora = LocalDateTime.now();
+        movAtual.setDataFim(agora);
+        movimentacaoImpressoraRepository.save(movAtual);
+
+        
+        ImpressorasModel  impAntiga = movAtual.getImpressora();
+        impAntiga.setStatusAtual(StatusImpressoras.TrocaTecnica);
+        impressorasRepository.save(impAntiga);
+
+        
+        ImpressorasModel  impBackup = impressorasRepository.findById(dto.idImpBackup())
+                .orElseThrow(() -> new RuntimeException("ImpressoraModel  de backup não encontrada"));
+        impBackup.setStatusAtual(StatusImpressoras.Alocado);
+        impressorasRepository.save(impBackup);
+
+        MovimentacaoImpressoraModel  novaMov = new MovimentacaoImpressoraModel();
+        novaMov.setImpressora(impBackup);
+        novaMov.setLocal(movAtual.getLocal());
+        novaMov.setDataInicio(agora);
+        novaMov.setDescricao("Troca técnica: Substituiu serial " + impAntiga.getSerial() + ". " + dto.descricao());
+        movimentacaoImpressoraRepository.save(novaMov);
+    }
 }

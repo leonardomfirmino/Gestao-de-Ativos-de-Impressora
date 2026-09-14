@@ -25,7 +25,16 @@ public class MovimentacaoImpressoraModel {
 
     @Column(name = "data_fim")
     private LocalDateTime dataFim;
+    
+    @Column(name = "descricao")
+    private String descricao;
 
+    public String getDescricao() {
+        return descricao;
+    }
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
     public Long getId_MovImp() {
         return id_MovImp;
     }

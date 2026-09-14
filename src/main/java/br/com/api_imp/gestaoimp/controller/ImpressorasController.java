@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import br.com.api_imp.gestaoimp.model.ImpressorasModel;
-import br.com.api_imp.gestaoimp.model.LocalModel;
 import br.com.api_imp.gestaoimp.service.ImpressorasService;
 
 import java.util.List;

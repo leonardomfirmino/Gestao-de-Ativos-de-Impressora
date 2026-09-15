@@ -16,4 +16,6 @@ public interface MovimentacaoImpressoraRepository extends JpaRepository<Moviment
     @Query("SELECT m.impressora.serial FROM MovimentacaoImpressoraModel m WHERE m.dataFim IS NULL")
     List<String> findByDataFimIsNull();
 
+    @Query("SELECT m FROM MovimentacaoImpressoraModel m " + "JOIN FETCH m.impressora " + "LEFT JOIN FETCH m.local")
+    List<MovimentacaoImpressoraModel> findAllComDetalhes();
 }

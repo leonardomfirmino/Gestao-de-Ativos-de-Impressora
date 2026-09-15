@@ -22,6 +22,7 @@ public class MovimentacaoImpressoraController {
     public List<MovimentacaoImpressoraModel> getMovimentacoesImpressora() {
         return movimentacaoImpressoraService.listarMovimentacoes();
     }
+    
     @PostMapping("/criarMovimentacaoImpressora")
     public MovimentacaoImpressoraModel criarMovimentacaoImpressora( @RequestBody MovimentacaoImpressoraModel movimentacaoImpressora) {
         return movimentacaoImpressoraService.criarMovimentacao(movimentacaoImpressora);

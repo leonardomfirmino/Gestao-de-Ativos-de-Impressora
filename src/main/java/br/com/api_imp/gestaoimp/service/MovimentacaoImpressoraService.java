@@ -107,7 +107,8 @@ public class MovimentacaoImpressoraService {
     }
 
     public List<MovimentacaoImpressoraModel> listarMovimentacoes() {
-        return movimentacaoImpressoraRepository.findAll();
+        
+        return movimentacaoImpressoraRepository.findAllComDetalhes();
     }
 
     public MovimentacaoImpressoraModel buscarMovimentacaoPorId(Long id) {
@@ -163,4 +164,6 @@ public class MovimentacaoImpressoraService {
         novaMov.setDescricao("Troca técnica: Substituiu serial " + impAntiga.getSerial() + ". " + dto.descricao());
         movimentacaoImpressoraRepository.save(novaMov);
     }
+
+
 }

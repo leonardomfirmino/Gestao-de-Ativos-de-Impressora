@@ -3,7 +3,6 @@ package br.com.api_imp.gestaoimp.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import br.com.api_imp.gestaoimp.dto.AlocacaoDTO;
@@ -59,16 +58,6 @@ public class MovimentacaoImpressoraService {
         }
 
         return movimentacaoImpressoraRepository.save(novaMov);
-    }
-
-    public MovimentacaoImpressoraModel atualizarMovimentacao(Long id,
-            MovimentacaoImpressoraModel movimentacaoImpressoraModel) {
-        MovimentacaoImpressoraModel movimentacaoImpressoraExistente = buscarMovimentacaoPorId(id);
-        movimentacaoImpressoraExistente.setDataFim(movimentacaoImpressoraModel.getDataFim());
-        movimentacaoImpressoraExistente.setDataInicio(movimentacaoImpressoraModel.getDataInicio());
-        movimentacaoImpressoraExistente.setImpressora(movimentacaoImpressoraModel.getImpressora());
-        movimentacaoImpressoraExistente.setLocal(movimentacaoImpressoraModel.getLocal());
-        return movimentacaoImpressoraRepository.save(movimentacaoImpressoraExistente);
     }
 
     public MovimentacaoImpressoraModel cadastrarImpressoraComLocal(MovimentacaoImpressoraModel novImpLocal) {

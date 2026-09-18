@@ -45,10 +45,6 @@ public class MovimentacaoImpressoraController {
         movimentacaoImpressoraService.realizarTrocaTecnica(dto);
         return ResponseEntity.ok().build();
     }
-    @PutMapping("/atualizarMovimentacaoImpressora/{id}")
-    public MovimentacaoImpressoraModel atualizarMovimentacaoImpressora(@PathVariable Long id, @RequestBody MovimentacaoImpressoraModel movimentacaoImpressora) {
-        return movimentacaoImpressoraService.atualizarMovimentacao(id, movimentacaoImpressora);
-    }
     
     @DeleteMapping("/deletarMovimentacaoImpressora/{id}")
     public void deletarMovimentacaoImpressora(@PathVariable Long id) {

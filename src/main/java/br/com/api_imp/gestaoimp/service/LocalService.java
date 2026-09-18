@@ -27,32 +27,7 @@ public class LocalService {
         return localRepository.save(local);
     }
 
-    public LocalModel atualizarLocal(Long id, LocalModel local) {
-        LocalModel localExistente = buscarLocal(id);
-        localExistente.setNomeLocal(local.getNomeLocal());
-        localExistente.setUnidade(local.getUnidade());
-        return localRepository.save(localExistente);
-    }
-
     public void deletarLocal(Long id) {
         localRepository.deleteById(id);
     }
-
-    public LocalModel buscarLocal(Long id) {
-        return localRepository.findById(id).orElseThrow(() -> new RuntimeException("Local não encontrado"));
-    }
-
-    public LocalModel buscarOuCriarLocal(String nomeLocal, String unidade) {
-
-        return localRepository
-                .findByNomeLocalAndUnidade(nomeLocal, unidade)
-                .orElseGet(() -> {
-                    LocalModel novo = new LocalModel();
-                    novo.setNomeLocal(nomeLocal);
-                    novo.setUnidade(unidade);
-
-                    return localRepository.save(novo);
-                });
-    }
-
 }

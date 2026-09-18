@@ -10,12 +10,13 @@ import br.com.api_imp.gestaoimp.model.MovimentacaoImpressoraModel;
 
 @Repository
 public interface MovimentacaoImpressoraRepository extends JpaRepository<MovimentacaoImpressoraModel, Long> {
-    @Query("SELECT m FROM MovimentacaoImpressoraModel m WHERE m.impressora.id_Imp = :id_Imp AND m.dataFim IS NULL")
-    Optional<MovimentacaoImpressoraModel> buscarMovimentacaoAtiva(Long id_Imp);
 
-    @Query("SELECT m.impressora.serial FROM MovimentacaoImpressoraModel m WHERE m.dataFim IS NULL")
+    @Query("SELECT m FROM MovimentacaoImpressoraModel m WHERE m.impressoraAntiga.id = :id_Imp_Antiga AND m.dataFim IS NULL")
+    Optional<MovimentacaoImpressoraModel> buscarMovimentacaoAtiva(Long id_Imp_Antiga);
+
+    @Query("SELECT m.impressoraAntiga.serial FROM MovimentacaoImpressoraModel m WHERE m.dataFim IS NULL OR m.dataFim > CURRENT_DATE")
     List<String> findByDataFimIsNull();
 
-    @Query("SELECT m FROM MovimentacaoImpressoraModel m " + "JOIN FETCH m.impressora " + "LEFT JOIN FETCH m.local")
+    @Query("SELECT m FROM MovimentacaoImpressoraModel m JOIN FETCH m.impressoraAntiga LEFT JOIN FETCH m.localAntiga")
     List<MovimentacaoImpressoraModel> findAllComDetalhes();
 }

@@ -29,17 +29,9 @@ public class LocalController {
     public LocalModel criarLocal(@RequestBody LocalModel local) {
         return localsService.criarLocal(local);
     }
-    @PutMapping("/atualizarLocal/{id}")
-    public LocalModel atualizarLocal(@PathVariable Long id, @RequestBody LocalModel local) {
-        return localsService.atualizarLocal(id, local);
-    }
     @DeleteMapping("/deletarLocal/{id}")
     public void deletarLocal(@PathVariable Long id) {
         localsService.deletarLocal(id);
     }  
-    @GetMapping("/local/{id}")
-    public LocalModel buscarLocal(@PathVariable Long id) {
-        return localsService.buscarLocal(id);
-    }
 
 }

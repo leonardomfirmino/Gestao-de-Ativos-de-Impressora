@@ -11,27 +11,29 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import br.com.api_imp.gestaoimp.repository.ImpressorasRepository;
+import br.com.api_imp.gestaoimp.repository.LocalRepository;
 import br.com.api_imp.gestaoimp.repository.MovimentacaoImpressoraRepository;
 import br.com.api_imp.gestaoimp.model.ImpressorasModel;
+import br.com.api_imp.gestaoimp.model.LocalModel;
 import br.com.api_imp.gestaoimp.model.MovimentacaoImpressoraModel;
 import br.com.api_imp.gestaoimp.model.StatusImpressoras;
 
 @Service
 public class ImpressorasService {
     private final ImpressorasRepository impressorasRepository;
-    private final LocalService localService;
+    private final LocalRepository localRepository;
     private final MovimentacaoImpressoraRepository movimentacaoRepository;
 
    
 
-    public ImpressorasService(ImpressorasRepository impressorasRepository, LocalService localService,
+    public ImpressorasService(ImpressorasRepository impressorasRepository, LocalRepository localRepository,
             MovimentacaoImpressoraRepository movimentacaoRepository) {
         this.impressorasRepository = impressorasRepository;
-        this.localService = localService;
+        this.localRepository = localRepository;
         this.movimentacaoRepository = movimentacaoRepository;
     }
 
-     private String getCellValue(Row row, int index) {// Obter valor de célula considerando diferentes tipos de dados
+    private String getCellValue(Row row, int index) {// Obter valor de célula considerando diferentes tipos de dados
         Cell cell = row.getCell(index);
 
         if (cell == null)
@@ -53,51 +55,6 @@ public class ImpressorasService {
         return impressorasRepository.buscarSerial();
     }
 
-    public void salvarOuAtualizarComMovimentacao(// Salvar ou atualizar impressora e registrar movimentação
-            String modelo,
-            String serial,
-            String nomeLocal,
-            String unidade,
-            String status,
-            String filaImpressao,
-            String ip) {
-
-        ImpressorasModel impressora = impressorasRepository
-                .findBySerialAndIp(serial, ip)
-                .orElse(new ImpressorasModel());
-
-        impressora.setModelo(modelo);
-        impressora.setSerial(serial);
-        impressora.setStatusAtual(StatusImpressoras.valueOf(status));
-        impressora.setFilaImpressao(filaImpressao);
-        impressora.setIp(ip);
-
-        impressora = impressorasRepository.save(impressora);
-
-        var local = localService.buscarOuCriarLocal(nomeLocal, unidade);
-
-        var movAtual = movimentacaoRepository.buscarMovimentacaoAtiva(impressora.getId());
-
-        if (movAtual.isPresent()) {
-            var mov = movAtual.get();
-
-            if (mov.getLocal().getIdLocal() == local.getIdLocal()) {
-                return;
-            }
-
-            mov.setDataFim(java.time.LocalDateTime.now());
-            movimentacaoRepository.save(mov);
-        }
-
-        MovimentacaoImpressoraModel novaMov = new MovimentacaoImpressoraModel();
-
-        novaMov.setImpressora(impressora);
-        novaMov.setLocal(local);
-        novaMov.setDataInicio(java.time.LocalDateTime.now());
-        novaMov.setDataFim(null);
-
-        movimentacaoRepository.save(novaMov);
-    }
 
     public void processarPlanilha(MultipartFile file) throws Exception {
         Workbook workbook = new XSSFWorkbook(file.getInputStream());
@@ -118,17 +75,21 @@ public class ImpressorasService {
             if (impressorasRepository.existsBySerial(serial)) {
                 throw new RuntimeException("Já existe uma impressora com esse serial: " + serial);
             }else{
-
-            salvarOuAtualizarComMovimentacao(modelo,
-                    serial,
-                    nomeLocal,
-                    unidade,
-                    status,
-                    filaImpressao,
-                    ip);
+            
+                ImpressorasModel impNova = new ImpressorasModel();
+                impNova.setSerial(serial);
+                impNova.setModelo(modelo);
+                impNova.setFilaImpressao(filaImpressao);
+                impNova.setStatus(StatusImpressoras.valueOf(status));
+                impNova.setIp(ip);
+                impressorasRepository.save(impNova);
+                LocalModel locNovo= new  LocalModel();
+                locNovo.setNomeLocal(nomeLocal);
+                locNovo.setUnidade(unidade);
+                localRepository.findByNomeLocalAndUnidade(nomeLocal, unidade).orElseGet(()->localRepository.save(locNovo));
+           
             }
         }
-
         workbook.close();
     }
 
@@ -149,7 +110,8 @@ public class ImpressorasService {
     public ImpressorasModel cadastrarImpressora(ImpressorasModel iModel){
         return impressorasRepository.save(iModel);
     }
-    public void deletarImp(Long id) {// Deletar impressora por ID
+    
+    public void deletarImp(Long id) {
         impressorasRepository.deleteById(id);
     }
 

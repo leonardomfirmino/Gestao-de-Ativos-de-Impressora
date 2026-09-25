@@ -19,9 +19,6 @@ public class LocalModel {
     public Long getIdLocal() {
         return id_local;
     }
-    public void setIdLocal(Long id_local) {
-        this.id_local = id_local;
-    }
 
     public String getNomeLocal() {
         return nomeLocal;

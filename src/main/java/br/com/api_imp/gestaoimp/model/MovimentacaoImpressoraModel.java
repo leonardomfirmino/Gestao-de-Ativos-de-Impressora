@@ -3,6 +3,8 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
+
+
 @Entity
 @Table(name = "movimentacao_impressora")
 
@@ -10,78 +12,59 @@ public class MovimentacaoImpressoraModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_MovImp;
+    private Long id;
+ 
+    @ManyToOne
+    @JoinColumn(name = "id_impressora")
+    private ImpressorasModel impressora;
 
     @ManyToOne
-    @JoinColumn(name = "id_Imp_Antiga", nullable = false)
-    private ImpressorasModel impressoraAntiga;
+    @JoinColumn(name = "id_local_origem")
+    private LocalModel localOrigem;
 
     @ManyToOne
-    @JoinColumn(name = "id_local_Antiga", nullable = false)
-    private LocalModel localAntiga;
+    @JoinColumn(name = "id_local_destino")
+    private LocalModel localDestino;
 
-    @ManyToOne
-    @JoinColumn(name = "id_Imp_Nova", nullable = false)
-    private ImpressorasModel impressoraNova;
+    private LocalDateTime dataMovimentacao;
+    private String descricaoMotivo;
 
-    @ManyToOne
-    @JoinColumn(name = "id_local_Nova", nullable = false)
-    private LocalModel localNova;
+    public Long getId() {
+        return id;
+    }
 
-    @Column(name = "data_inicio", nullable = false)
-    private LocalDateTime dataInicio = LocalDateTime.now();
-
-    @Column(name = "data_fim")
-    private LocalDateTime dataFim;
-    
-    @Column(name = "descricao")
-    private String descricao;
-
-    public ImpressorasModel getImpressoraNova() {
-        return impressoraNova;
-    }
-    public void setImpressoraNova(ImpressorasModel impressoraNova) {
-        this.impressoraNova = impressoraNova;
-    }
-    public LocalModel getLocalNova() {
-        return localNova;
-    }
-    public void setLocalNova(LocalModel localNova) {
-        this.localNova = localNova;
-    }
-    public String getDescricao() {
-        return descricao;
-    }
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-    public Long getId_MovImp() {
-        return id_MovImp;
-    }
     public ImpressorasModel getImpressora() {
-        return impressoraAntiga;
+        return impressora;
     }
-    public void setImpressora(ImpressorasModel impressoraAntiga) {
-        this.impressoraAntiga = impressoraAntiga;
+    public void setImpressora(ImpressorasModel impressora) {
+        this.impressora = impressora;
     }
-    public LocalModel getLocal() {
-        return localAntiga;
+    public LocalModel getLocalOrigem() {
+        return localOrigem;
     }
-    public void setLocal(LocalModel localAntiga) {
-        this.localAntiga = localAntiga;
+    public void setLocalOrigem(LocalModel localOrigem) {
+        this.localOrigem = localOrigem;
     }
-    public LocalDateTime getDataInicio() {
-        return dataInicio;
+    public LocalModel getLocalDestino() {
+        return localDestino;
     }
-    public void setDataInicio(LocalDateTime dataInicio) {
-        this.dataInicio = dataInicio;
+    public void setLocalDestino(LocalModel localDestino) {
+        this.localDestino = localDestino;
     }
-    public LocalDateTime getDataFim() {
-        return dataFim;
+    public LocalDateTime getDataMovimentacao() {
+        return dataMovimentacao;
     }
-    public void setDataFim(LocalDateTime dataFim) {
-        this.dataFim = dataFim;
+    public void setDataMovimentacao(LocalDateTime dataMovimentacao) {
+        this.dataMovimentacao = dataMovimentacao;
     }
+    public String getDescricaoMotivo() {
+        return descricaoMotivo;
+    }
+    public void setDescricaoMotivo(String descricaoMotivo) {
+        this.descricaoMotivo = descricaoMotivo;
+    }
+
+    
     
 
     

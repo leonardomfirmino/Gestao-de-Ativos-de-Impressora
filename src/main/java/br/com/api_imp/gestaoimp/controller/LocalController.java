@@ -3,35 +3,33 @@ package br.com.api_imp.gestaoimp.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import br.com.api_imp.gestaoimp.dto.ResponseUnidadeDTO;
 import br.com.api_imp.gestaoimp.model.LocalModel;
 import br.com.api_imp.gestaoimp.service.LocalService;
 
 
 @RestController
-@RequestMapping("/locais")
+@RequestMapping("/api/projects")
 public class LocalController {
     @Autowired
-    private LocalService localsService;
-    
-   @GetMapping("/unidades")
-    public List<String> unidades(){
-        return localsService.buscarUnidades();
-    }
+    private LocalService localService;
 
-    @GetMapping("/nomes")
-    public List<String> nomes(){
-        return localsService.buscarLocais();
+    @GetMapping 
+    public ResponseEntity<List<ResponseUnidadeDTO>> listarUnidades(){
+        List<ResponseUnidadeDTO> unidades=localService.listarUnidade();
+        return ResponseEntity.ok(unidades);
     }
 
     @PostMapping("/criarLocal")
     public LocalModel criarLocal(@RequestBody LocalModel local) {
-        return localsService.criarLocal(local);
+        return localService.criarLocal(local);
     }
     @DeleteMapping("/deletarLocal/{id}")
     public void deletarLocal(@PathVariable Long id) {
-        localsService.deletarLocal(id);
+        localService.deletarLocal(id);
     }  
 
 }

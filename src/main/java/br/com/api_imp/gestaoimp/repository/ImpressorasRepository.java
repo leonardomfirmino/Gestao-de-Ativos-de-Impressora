@@ -5,27 +5,30 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import br.com.api_imp.gestaoimp.model.ImpressorasModel;
 
 @Repository
 public interface ImpressorasRepository extends JpaRepository<ImpressorasModel,Long> {
-    Optional<ImpressorasModel> findBySerialAndIp(String serial, String ip);
-    
-    Optional<ImpressorasModel> findBySerial(String serial);
     
     boolean existsBySerial(String serial);
 
-    @Query(value = "SELECT DISTINCT modelo FROM impressoras ORDER BY modelo", nativeQuery = true)
-    List<String> buscarModelos();
+    @Query(value = "SELECT i.*"+
+                "FROM impressora i"+
+                "WHERE i.serial=:serial",nativeQuery = true)
+    Optional <ImpressorasModel> findSerial(String serial);
+    
+    @Query(value = "SELECT i.*, l.unidade " +
+               "FROM impressora i " +
+               "INNER JOIN locais l ON i.id_local_atual = l.id_local " +
+               "WHERE l.id_local = :id_local", nativeQuery = true)
+    List<ImpressorasModel> findAllWithImpressoraUnidade(long id_local);
 
-    @Query(value = "SELECT DISTINCT serial FROM impressoras ORDER BY serial", nativeQuery = true)
-    List<String> buscarSerial();
+    @Query(value = "SELECT i.* FROM impressora i" +
+                    "INNER JOIN locais l ON i.id_local_atual = l.id_local", nativeQuery = true)
+    List<ImpressorasModel> findAllWithLocalAtual();
 
-    @Query("SELECT i.id_Imp FROM ImpressorasModel i WHERE i.serial = :serial")
-    Optional<Long> findIdBySerial(@Param("serial") String serial);
 
 
     

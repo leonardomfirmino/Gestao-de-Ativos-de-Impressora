@@ -1,10 +1,13 @@
 package br.com.api_imp.gestaoimp.model;
 
+
+
+
 import jakarta.persistence.*;
 
 
 @Entity
-@Table(name = "impressoras")
+@Table(name = "impressora")
 public class ImpressorasModel {
 
     @Id
@@ -17,33 +20,35 @@ public class ImpressorasModel {
     @Column(nullable = false, length = 100)
     private String modelo;
 
-    @Column(name = "fila_impressao", length = 100)
-    private String filaImpressao;
+    @Column(name = "assetTag", length = 100)
+    private String assetTag;
 
     @Column(name = "ip", length = 15)
     private String ip;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status_atual", nullable = false)
-    private StatusImpressoras statusAtual = StatusImpressoras.Estoque;
+    private StatusImpressoras statusAtual = StatusImpressoras.ESTOQUE;
 
+    @ManyToOne
+    @JoinColumn(name = "id_local_atual")
+    private LocalModel localAtual;
+
+
+    public LocalModel getLocalAtual() {
+        return localAtual;
+    }
+    public void setLocalAtual(LocalModel localAtual) {
+        this.localAtual = localAtual;
+    }
     public String getIp() {
         return ip;
     }
     public void setIp(String ip) {
         this.ip = ip;
     }
-    public void setStatus(StatusImpressoras status) {
-        this.statusAtual = status;
-    }
-    public StatusImpressoras getStatus() {
-        return statusAtual;
-    }
     public Long getId() {
         return id_Imp;
-    }
-    public void setId(Long id_Imp) {
-        this.id_Imp = id_Imp;
     }
     public String getSerial() {
         return serial;
@@ -57,11 +62,11 @@ public class ImpressorasModel {
     public void setModelo(String modelo) {
         this.modelo = modelo;
     }
-    public String getFilaImpressao() {
-        return filaImpressao;
+    public String getAssetTag() {
+        return assetTag;
     }
-    public void setFilaImpressao(String filaImpressao) {
-        this.filaImpressao = filaImpressao;
+    public void setAssetTag(String assetTag) {
+        this.assetTag = assetTag;
     }
     public StatusImpressoras getStatusAtual() {
         return statusAtual;
@@ -71,4 +76,3 @@ public class ImpressorasModel {
     }
     
 }
-

@@ -1,0 +1,11 @@
+{
+  "name": "printflow-frontend",
+  "private": true,
+  "scripts": {
+    "build:css": "tailwindcss -i ./src/main/tailwind/input.css -o ./src/main/resources/static/app/tailwind.css --minify",
+    "watch:css": "tailwindcss -i ./src/main/tailwind/input.css -o ./src/main/resources/static/app/tailwind.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "3.4.17"
+  }
+}

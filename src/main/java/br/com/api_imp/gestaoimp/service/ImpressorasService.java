@@ -2,6 +2,7 @@ package br.com.api_imp.gestaoimp.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Arrays;
 
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -76,11 +77,13 @@ public class ImpressorasService {
                 impNova.setAssetTag(assetTag);
                 impNova.setStatusAtual(StatusImpressoras.valueOf(status));
                 impNova.setIp(ip);
-                impressorasRepository.save(impNova);
                 LocalModel locNovo= new  LocalModel();
                 locNovo.setNomeLocal(nomeLocal);
                 locNovo.setUnidade(unidade);
-                localRepository.findByNomeLocalAndUnidade(nomeLocal, unidade).orElseGet(()->localRepository.save(locNovo));
+                LocalModel local = localRepository.findByNomeLocalAndUnidade(nomeLocal, unidade)
+                        .orElseGet(() -> localRepository.save(locNovo));
+                impNova.setLocalAtual(local);
+                impressorasRepository.save(impNova);
            
             }
         }
@@ -99,7 +102,7 @@ public class ImpressorasService {
         novaImpressora.setSerial(dto.serial());
         novaImpressora.setAssetTag(dto.assetTag());
         novaImpressora.setIp(dto.ip());
-        novaImpressora.setStatusAtual(StatusImpressoras.valueOf(dto.status()));
+        novaImpressora.setStatusAtual(StatusImpressoras.valueOf(dto.status().toUpperCase()));
 
         if (dto.local() != null) {
             LocalModel localInicial = localRepository.findById(Long.parseLong(dto.local()))
@@ -134,20 +137,30 @@ public class ImpressorasService {
         historico.setLocalOrigem(localAntigo);
         historico.setLocalDestino(novoLocal);
         historico.setDataMovimentacao(LocalDateTime.now());
+        historico.setDescricaoMotivo(dto.descricaoMotivo());
         movimentacaoRepository.save(historico);
     }
 
+    public List<String> transicoesPermitidas(String status) {
+        StatusImpressoras atual = StatusImpressoras.valueOf(status.toUpperCase());
+        return Arrays.stream(StatusImpressoras.values())
+                .filter(destino -> transicaoPermitida(atual, destino))
+                .map(Enum::name)
+                .toList();
+    }
+
     private void validarTransicao(StatusImpressoras atual, StatusImpressoras destino) {
-        boolean permitida = switch (atual) {
-            case ATIVA -> destino == StatusImpressoras.BACKUP || destino == StatusImpressoras.ESTOQUE
-                    || destino == StatusImpressoras.MANUTENCAO;
-            case BACKUP -> destino == StatusImpressoras.ESTOQUE;
-            case ESTOQUE -> destino == StatusImpressoras.ATIVA || destino == StatusImpressoras.MANUTENCAO
-                    || destino == StatusImpressoras.DESATIVADA || destino == StatusImpressoras.BACKUP;
+        if (!transicaoPermitida(atual, destino)) throw new IllegalArgumentException("Esta transição de status não é permitida.");
+    }
+
+    private boolean transicaoPermitida(StatusImpressoras atual, StatusImpressoras destino) {
+        return switch (atual) {
+            case ATIVA -> destino == StatusImpressoras.BACKUP || destino == StatusImpressoras.ESTOQUE || destino == StatusImpressoras.MANUTENCAO;
+            case BACKUP -> destino == StatusImpressoras.ESTOQUE || destino == StatusImpressoras.ATIVA;
+            case ESTOQUE -> destino == StatusImpressoras.ATIVA || destino == StatusImpressoras.MANUTENCAO || destino == StatusImpressoras.DESATIVADA || destino == StatusImpressoras.BACKUP;
             case MANUTENCAO -> destino == StatusImpressoras.ESTOQUE || destino == StatusImpressoras.BACKUP;
             case DESATIVADA -> false;
         };
-        if (!permitida) throw new IllegalArgumentException("Esta transição de status não é permitida.");
     }
 
     @Transactional
@@ -176,8 +189,10 @@ public class ImpressorasService {
         impressorasRepository.save(ativa);
         impressorasRepository.save(backup);
 
-        salvarHistorico(ativa, localAtiva, localBackup, "Trocada por impressora de backup");
-        salvarHistorico(backup, localBackup, localAtiva, "Assumiu o lugar da impressora ativa");
+        String descricao = dto.descricaoMotivo() == null || dto.descricaoMotivo().isBlank()
+                ? "Inversão entre impressora ativa e backup" : dto.descricaoMotivo().trim();
+        salvarHistorico(ativa, localAtiva, localBackup, descricao);
+        salvarHistorico(backup, localBackup, localAtiva, descricao);
     }
 
     private void salvarHistorico(ImpressorasModel impressora, LocalModel origem, LocalModel destino, String motivo) {

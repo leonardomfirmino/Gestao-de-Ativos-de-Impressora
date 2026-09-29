@@ -14,16 +14,16 @@ public interface ImpressorasRepository extends JpaRepository<ImpressorasModel,Lo
     
     boolean existsBySerial(String serial);
 
-    @Query(value = "SELECT i.*"+
-                "FROM impressora i"+
+    @Query(value = "SELECT i.* "+
+                "FROM impressora i "+
                 "WHERE i.serial=:serial",nativeQuery = true)
     Optional <ImpressorasModel> findSerial(String serial);
     
-    @Query(value = "SELECT i.*, l.unidade " +
+    @Query(value = "SELECT i.* " +
                "FROM impressora i " +
                "INNER JOIN locais l ON i.id_local_atual = l.id_local " +
-               "WHERE l.id_local = :id_local", nativeQuery = true)
-    List<ImpressorasModel> findAllWithImpressoraUnidade(long id_local);
+               "WHERE l.unidade = (SELECT unidade FROM locais WHERE id_local = :idUnidade)", nativeQuery = true)
+    List<ImpressorasModel> findAllWithImpressoraUnidade(long idUnidade);
 
     @Query(value = "SELECT i.* FROM impressora i" +
                     "INNER JOIN locais l ON i.id_local_atual = l.id_local", nativeQuery = true)

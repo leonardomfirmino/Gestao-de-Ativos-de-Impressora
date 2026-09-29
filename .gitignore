@@ -14,3 +14,6 @@
 .DS_Store
 Thumbs.db
 
+# Frontend build dependencies/cache (the compiled CSS is versioned)
+/node_modules/
+/.npm-cache/

@@ -18,8 +18,8 @@ public record ResponseMovimentacaoDTO(
             model.getId(),
             model.getImpressora() != null ? model.getImpressora().getSerial() : "N/A",
             model.getImpressora() != null ? model.getImpressora().getModelo() : "N/A",
-            model.getLocalOrigem() != null ? model.getLocalOrigem().getUnidade() : "N/A",
-            model.getLocalDestino() != null ? model.getLocalDestino().getUnidade() : "N/A",
+            model.getLocalOrigem() != null ? model.getLocalOrigem().getNomeLocal() : "N/A",
+            model.getLocalDestino() != null ? model.getLocalDestino().getNomeLocal() : "N/A",
             model.getDescricaoMotivo(),
             model.getDataMovimentacao()
         );

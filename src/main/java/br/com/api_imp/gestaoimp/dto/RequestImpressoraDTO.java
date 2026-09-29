@@ -5,5 +5,6 @@ public record RequestImpressoraDTO(
     String local,
     String ip,
     String assetTag,
-    String status 
+    String status,
+    String descricaoMotivo
 ) {}

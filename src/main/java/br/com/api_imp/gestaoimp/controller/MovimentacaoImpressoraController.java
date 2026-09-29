@@ -10,7 +10,7 @@ import br.com.api_imp.gestaoimp.dto.ResponseMovimentacaoDTO;
 import br.com.api_imp.gestaoimp.service.MovimentacaoImpressoraService;
 
 @RestController
-@RequestMapping("projects")
+@RequestMapping("/api/projects")
 public class MovimentacaoImpressoraController {
     @Autowired
     private MovimentacaoImpressoraService movimentacaoImpressoraService;

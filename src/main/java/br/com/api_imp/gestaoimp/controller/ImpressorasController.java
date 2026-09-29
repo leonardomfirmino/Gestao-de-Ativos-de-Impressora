@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
 @RestController
-@RequestMapping("projects")
+@RequestMapping("/api/projects")
 public class ImpressorasController {
 
     @Autowired
@@ -41,6 +41,11 @@ public class ImpressorasController {
     public ResponseEntity<Void> inverterImpressoras(@RequestBody InversaoImpressorasDTO dto) {
         impressorasService.inverter(dto);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/status/{status}/transicoes")
+    public ResponseEntity<List<String>> transicoesPermitidas(@PathVariable String status) {
+        return ResponseEntity.ok(impressorasService.transicoesPermitidas(status));
     }
 
     @PostMapping("/upload")

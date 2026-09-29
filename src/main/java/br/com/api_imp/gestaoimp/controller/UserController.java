@@ -13,7 +13,7 @@ import br.com.api_imp.gestaoimp.dto.UserResponseDTO;
 import br.com.api_imp.gestaoimp.service.UserService;
 
 @RestController
-@RequestMapping("api/users")
+@RequestMapping("/api/users")
 @PreAuthorize("hasRole('ADMIN')")
 public class UserController {
     private final UserService users;
